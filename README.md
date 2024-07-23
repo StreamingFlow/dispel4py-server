@@ -1,4 +1,5 @@
-### Server Installation and Execution
+![Laminar Logo](logo.webp)
+### Laminar Server Installation and Execution
 Open a new terminal with the new `Laminar` directory.
 ```
 /data/Laminar> 
