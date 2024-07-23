@@ -5,7 +5,7 @@ Open a new terminal with the new `Laminar` directory.
 ```
 Clone the server application repository.
 ```
-/data/Laminar> git clone https://github.com/Laminar-2/dispel4py-server.git
+/data/Laminar> git clone https://github.com/StreamingFlow/dispel4py-server.git
 ```
 Enter the server directory.
 ```
