@@ -30,8 +30,8 @@ public class Workflow extends Registry {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "workflow_pe",
-            joinColumns = @JoinColumn(name = "pe_id"),
-            inverseJoinColumns = @JoinColumn(name = "workflow_id"))
+            joinColumns = @JoinColumn(name = "workflow_id"),
+            inverseJoinColumns = @JoinColumn(name = "pe_id"))
     List<PE> PEs;
 
     @ManyToMany
