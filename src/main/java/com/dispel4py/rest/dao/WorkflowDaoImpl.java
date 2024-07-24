@@ -5,6 +5,7 @@ import com.dispel4py.rest.error.EntityNotFoundException;
 import com.dispel4py.rest.error.UnauthorizedException;
 import com.dispel4py.rest.model.User;
 import com.dispel4py.rest.model.Workflow;
+import com.dispel4py.rest.model.PE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 public class WorkflowDaoImpl implements WorkflowDao {
 
     private final EntityManager entityManager;
+    private final PEDao peDao; // Inject PEDao
 
     @Autowired
-    public WorkflowDaoImpl(EntityManager entityManager) {
+    public WorkflowDaoImpl(EntityManager entityManager, PEDao peDao) { // Constructor injection
         this.entityManager = entityManager;
+        this.peDao = peDao;
     }
 
     @Override
@@ -32,45 +35,32 @@ public class WorkflowDaoImpl implements WorkflowDao {
         Workflow check;
 
         try {
-
             check = getWorkflowByName(workflow.getEntryPoint(), owner.getUserName());
-
             if (check != null) {
-
                 throw new EntityExistsException(Workflow.class, "entryPoint", workflow.getEntryPoint(), "id", Integer.toString(check.getWorkflowId()));
             }
-
         } catch (EntityNotFoundException ex) {
-
             ArrayList<User> users = new ArrayList<>();
             users.add(owner);
             workflow.setUser(users);
-
             Workflow dbWorkflow = entityManager.merge(workflow);
             return dbWorkflow;
-
         } catch (UnauthorizedException ex) {
-
             //add user to PE
             Workflow updateWf = (Workflow) entityManager.createQuery("SELECT u FROM Workflow u WHERE u.entryPoint=:entryPoint")
                     .setParameter("entryPoint", workflow.getEntryPoint()).getSingleResult();
 
             updateWf.getUser().add(owner);
             persist(updateWf);
-
             return updateWf;
-
         }
 
         return workflow;
-
     }
 
     @Override
     public Workflow getWorkflowByID(Long id, String user) {
-
         Workflow wf = entityManager.find(Workflow.class, id.intValue());
-
         if (wf == null) {
             throw new EntityNotFoundException(Workflow.class, "id", id.toString());
         }
@@ -84,7 +74,6 @@ public class WorkflowDaoImpl implements WorkflowDao {
         }
 
         return wf;
-
     }
 
     @Override
@@ -102,17 +91,17 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
     @Override
     public List<Workflow> searchWorkflow(String search, String user) {
-        TypedQuery<Workflow> typedQuery
-                = entityManager.createQuery("SELECT u FROM Workflow u JOIN u.user r WHERE r.userName=:userId and lower(u.entryPoint) LIKE CONCAT('%',lower(:search),'%') OR u.description LIKE CONCAT('%',lower(:search),'%')", Workflow.class);
+        TypedQuery<Workflow> typedQuery = entityManager.createQuery(
+                "SELECT u FROM Workflow u JOIN u.user r WHERE r.userName=:userId and lower(u.entryPoint) LIKE CONCAT('%',lower(:search),'%') OR u.description LIKE CONCAT('%',lower(:search),'%')",
+                Workflow.class
+        );
         typedQuery.setParameter("search", search).setParameter("userId", user);
         return typedQuery.getResultList();
     }
 
     @Override
     public Workflow getWorkflowByName(String workflowName, String user) {
-
         try {
-
             Workflow wf = entityManager.createQuery("SELECT u FROM Workflow u WHERE u.entryPoint=:workflowName", Workflow.class)
                     .setParameter("workflowName", workflowName).getSingleResult();
 
@@ -123,48 +112,42 @@ public class WorkflowDaoImpl implements WorkflowDao {
             }
 
             throw new UnauthorizedException(User.class, "userId", user, "entryPoint", workflowName);
-
-
         } catch (NoResultException ex) {
             throw new EntityNotFoundException(Workflow.class, "entryPoint", workflowName);
-
         }
-
     }
 
     @Override
     public int removeWorkflowByName(String workflowName, User owner) {
-
         Workflow workflowToRemove = getWorkflowByName(workflowName, owner.getUserName());
 
         if (workflowToRemove.getUser().size() > 1) {
-
             workflowToRemove.getUser().remove(owner);
             persist(workflowToRemove);
-
         } else {
+            // Workflow has only one user, remove the workflow but do not remove the PEs
+            for (PE pe : workflowToRemove.getPEs()) {
+                pe.getUser().remove(owner);
+                peDao.persist(pe); // Use PEDao for persisting PE
+            }
             workflowToRemove.getPEs().clear();
             entityManager.remove(workflowToRemove);
         }
-
 
         return 1;
     }
 
     @Override
     public int removeWorkflowByID(Long id, User owner) {
-
         Workflow workflowToRemove = getWorkflowByID(id, owner.getUserName());
 
         if (workflowToRemove.getUser().size() > 1) {
-
             workflowToRemove.getUser().remove(owner);
             persist(workflowToRemove);
-
         } else {
+            workflowToRemove.getPEs().clear();
             entityManager.remove(workflowToRemove);
         }
-
 
         return 1;
     }
@@ -172,33 +155,31 @@ public class WorkflowDaoImpl implements WorkflowDao {
     @Override
     public Collection getPEsByWorkflow(Long id, String user) {
         try {
-
-            TypedQuery<Collection> typedQuery
-                    = entityManager.createQuery("SELECT u.PEs FROM Workflow u JOIN u.user r WHERE r.userName=:userId and u.workflowId=:id", Collection.class);
+            TypedQuery<Collection> typedQuery = entityManager.createQuery(
+                    "SELECT u.PEs FROM Workflow u JOIN u.user r WHERE r.userName=:userId and u.workflowId=:id",
+                    Collection.class
+            );
             typedQuery.setParameter("id", id.intValue()).setParameter("userId", user);
 
             return typedQuery.getResultList();
-
         } catch (NoResultException ex) {
             throw new EntityNotFoundException(Workflow.class, "id", Integer.toString(id.intValue()));
         }
-
     }
 
     @Override
     public Collection getPEsByWorkflow(String workflowName, String user) {
-
         try {
-
-            TypedQuery<Collection> typedQuery
-                    = entityManager.createQuery("SELECT u.PEs FROM Workflow u JOIN u.user r WHERE r.userName=:userId and u.entryPoint=:workflowName", Collection.class);
+            TypedQuery<Collection> typedQuery = entityManager.createQuery(
+                    "SELECT u.PEs FROM Workflow u JOIN u.user r WHERE r.userName=:userId and u.entryPoint=:workflowName",
+                    Collection.class
+            );
             typedQuery.setParameter("workflowName", workflowName).setParameter("userId", user);
 
             return typedQuery.getResultList();
-
         } catch (NoResultException ex) {
             throw new EntityNotFoundException(Workflow.class, "workflowName", workflowName);
         }
-
     }
 }
+
