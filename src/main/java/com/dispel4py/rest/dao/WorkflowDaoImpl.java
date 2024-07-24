@@ -143,6 +143,7 @@ public class WorkflowDaoImpl implements WorkflowDao {
             persist(workflowToRemove);
 
         } else {
+            workflowToRemove.getPEs().clear();
             entityManager.remove(workflowToRemove);
         }
 
