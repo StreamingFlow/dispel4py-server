@@ -31,4 +31,6 @@ public interface WorkflowDao {
     Collection getPEsByWorkflow(Long id, String user);
 
     Collection getPEsByWorkflow(String workflowName, String user);
+
+    Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription);
 }

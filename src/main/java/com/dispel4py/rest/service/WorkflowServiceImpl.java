@@ -108,6 +108,10 @@ public class WorkflowServiceImpl implements WorkflowService {
     public Collection getPEsByWorkflow(String name, String user) {
         return workflowDao.getPEsByWorkflow(name, user);
     }
-
-
+    @Override
+    @Transactional
+     public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription) {
+        return workflowDao.updateWorkflowDescriptionByWorkflow(workflowId, newDescription);
+    }
 }
+

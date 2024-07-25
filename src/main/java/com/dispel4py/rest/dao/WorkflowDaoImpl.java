@@ -69,6 +69,19 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
     }
 
+
+    @Override
+    public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription) {
+    	Workflow workflow = entityManager.find(Workflow.class, workflowId.intValue());
+    	if (workflow == null) {
+        	throw new EntityNotFoundException(Workflow.class, "workflowId", workflowId.toString());
+    	}
+
+    	workflow.setDescription(newDescription);
+    	entityManager.merge(workflow);
+    	return workflow;
+    }
+
     @Override
     public Workflow getWorkflowByID(Long id, String user) {
 

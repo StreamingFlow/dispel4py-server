@@ -65,5 +65,10 @@ public class WorkflowController {
         return workflowService.getPEsByWorkflow(name, user);
     }
 
+    @PutMapping("/update/{workflowId}/description")
+    public Workflow updateWorkflowDescriptionByWorkflow(@PathVariable(value = "workflowId") Long workflowId, @RequestBody String description) {
+        return workflowService.updateWorkflowDescriptionByWorkflow(workflowId, description);
+    }
+
 
 }
