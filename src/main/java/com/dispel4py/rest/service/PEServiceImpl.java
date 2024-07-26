@@ -71,5 +71,12 @@ public class PEServiceImpl implements PEService {
 
         return PEDao.removePEbyName(peName, owner);
     }
+    
+    @Override
+    @Transactional
+     public PE updatePEDescriptionById(Long id, String newDescription){
+        return PEDao.updatePEDescriptionById (id,newDescription);
+
+    }
 
 }

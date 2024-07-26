@@ -47,5 +47,9 @@ public class PEController {
     public int removePEbyName(@PathVariable(value = "name") String name, @PathVariable String user) {
         return peService.removePEByName(name, user);
     }
+    @PutMapping("/update/{id}/description")
+    public PE updatePEDescriptionById(@PathVariable(value = "id") Long id, @RequestBody String description) {
+        return peService.updatePEDescriptionById(id, description);
+    }
 
 }

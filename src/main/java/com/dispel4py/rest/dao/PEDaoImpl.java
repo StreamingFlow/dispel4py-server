@@ -164,4 +164,17 @@ public class PEDaoImpl implements PEDao {
         return pe;
     }
 
+  
+    @Override
+    public PE updatePEDescriptionById(Long id, String newDescription) {
+    	PE pe = entityManager.find(PE.class, id.intValue());
+    	if (pe == null) {
+        	throw new EntityNotFoundException(PE.class, "id", id.toString());
+    	}
+
+    	pe.setDescription(newDescription);
+    	entityManager.merge(pe);
+    	return pe;
+    }
+
 }

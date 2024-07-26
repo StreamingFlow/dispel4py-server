@@ -25,4 +25,6 @@ public interface PEDao {
     List<PE> getAllPEs(String user);
 
     PE persist(PE pe);
+ 
+    PE updatePEDescriptionById(Long id, String newDescription);
 }

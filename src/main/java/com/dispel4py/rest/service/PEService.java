@@ -20,6 +20,7 @@ public interface PEService {
     int removePEbyID(Long id, String user);
 
     int removePEByName(String peName, String user);
-
+    
+    PE updatePEDescriptionById(Long id, String description);
 
 }
