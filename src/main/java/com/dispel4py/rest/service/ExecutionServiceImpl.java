@@ -4,16 +4,21 @@ import com.dispel4py.rest.model.Execution;
 import com.dispel4py.rest.model.PE;
 import com.dispel4py.rest.model.Workflow;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Mono;
 import org.springframework.core.env.Environment;
-import reactor.core.publisher.Flux;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.io.IOException;
+import java.util.logging.Logger;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 
@@ -31,21 +36,44 @@ public class ExecutionServiceImpl implements ExecutionService {
 
     @Override
     public void sendResources(MultipartFile[] files, String user) {
+        Logger logger = Logger.getLogger(getClass().getName());
         String url = env.getProperty("laminar.execution.url");
         WebClient webClient = WebClient.create(url);
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("user", user);
         for (MultipartFile file : files) {
-            builder.part("files", file.getResource());
+            try {
+                builder.part("files", new InputStreamResource(file.getInputStream()), MediaType.APPLICATION_OCTET_STREAM)
+                       .filename(file.getOriginalFilename());
+                logger.info("Adding file to multipart: " + file.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
+        logger.info("Sending resources to URL: " + url + "/resource for user: " + user);
+
         Mono<Void> result = webClient.put()
-                .uri("/resource")
+                .uri(uriBuilder -> uriBuilder.path("/resource").build())
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .bodyToMono(Void.class);
+
+        result.subscribe(
+                success -> logger.info("Resources uploaded successfully"),
+                error -> {
+                    if (error instanceof WebClientResponseException) {
+                        WebClientResponseException webClientResponseException = (WebClientResponseException) error;
+                        logger.severe("Error uploading resources: " + webClientResponseException.getStatusCode() + " - " + webClientResponseException.getResponseBodyAsString());
+                    } else {
+                        logger.severe("Error uploading resources: " + error.getMessage());
+                    }
+                }
+        );
+
+        logger.info("After sending resources to URL: " + url + "/resource for user: " + user);
     }
 
     public Flux<String> runWorkflow(Execution e, String user) {
@@ -109,3 +137,4 @@ public class ExecutionServiceImpl implements ExecutionService {
 
     }
 }
+
