@@ -19,8 +19,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - laminar-network
 
   mysql:
     image: mysql:latest
@@ -37,7 +37,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - laminar-network
 
 volumes:
   laminar-db:
+
+networks:
+  laminar-network:
+    driver: bridge
 
