@@ -26,6 +26,10 @@ public class Workflow extends Registry {
 
     @Column
     String description;
+    
+    @Lob
+    @Column(length = 20000)
+    String descEmbedding;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -39,7 +43,7 @@ public class Workflow extends Registry {
     List<User> user;
 
 
-    public Workflow(Integer id, String workflowName, String workflowCode, String entryPoint, String description, List<PE> PEs, List<User> user) {
+    public Workflow(Integer id, String workflowName, String workflowCode, String entryPoint, String description,  String descEmbedding,  List<PE> PEs, List<User> user) {
         this.workflowId = id;
         this.workflowName = workflowName;
         this.workflowCode = workflowCode;
@@ -47,6 +51,7 @@ public class Workflow extends Registry {
         this.description = description;
         this.PEs = PEs;
         this.user = user;
+        this.descEmbedding = descEmbedding;
     }
 
 
@@ -110,10 +115,17 @@ public class Workflow extends Registry {
         this.user = user;
     }
 
+    public String getDescEmbedding() {
+        return descEmbedding;
+    }
+
+    public void setDescEmbedding(String descEmbedding) {
+        this.descEmbedding = descEmbedding;
+    }
+
     @Override
     public String toString() {
         return "Workflow(" + this.getWorkflowId() + "\n" + this.getWorkflowName()
                 + "\n" + this.getEntryPoint() + "\n" + getDescription() + ")";
     }
-
 }
