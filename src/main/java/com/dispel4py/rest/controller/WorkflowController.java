@@ -5,7 +5,7 @@ import com.dispel4py.rest.error.EntityNotFoundException;
 import com.dispel4py.rest.model.Workflow;
 import com.dispel4py.rest.service.WorkflowService;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Map;
 import java.util.Collection;
 import java.util.List;
 
@@ -65,10 +65,17 @@ public class WorkflowController {
         return workflowService.getPEsByWorkflow(name, user);
     }
 
-    @PutMapping("/update/{workflowId}/description")
-    public Workflow updateWorkflowDescriptionByWorkflow(@PathVariable(value = "workflowId") Long workflowId, @RequestBody String description) {
-        return workflowService.updateWorkflowDescriptionByWorkflow(workflowId, description);
-    }
+   @PutMapping("/update/{workflowId}/description")
+   public Workflow updateWorkflowDescriptionByWorkflow(
+        @PathVariable(value = "workflowId") Long workflowId, 
+        @RequestBody Map<String, String> payload) {
+    
+    String description = payload.get("description");
+    String descEmbedding = payload.get("descEmbedding");
+    
+    return workflowService.updateWorkflowDescriptionByWorkflow(workflowId, description, descEmbedding);
+}
+
 
 
 }

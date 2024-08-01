@@ -26,5 +26,5 @@ public interface PEDao {
 
     PE persist(PE pe);
  
-    PE updatePEDescriptionById(Long id, String newDescription);
+    PE updatePEDescriptionById(Long id, String newDescription, String descEmbedding);
 }

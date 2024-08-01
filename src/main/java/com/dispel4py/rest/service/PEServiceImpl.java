@@ -74,8 +74,8 @@ public class PEServiceImpl implements PEService {
     
     @Override
     @Transactional
-     public PE updatePEDescriptionById(Long id, String newDescription){
-        return PEDao.updatePEDescriptionById (id,newDescription);
+     public PE updatePEDescriptionById(Long id, String newDescription, String descEmbedding){
+        return PEDao.updatePEDescriptionById (id, newDescription, descEmbedding);
 
     }
 

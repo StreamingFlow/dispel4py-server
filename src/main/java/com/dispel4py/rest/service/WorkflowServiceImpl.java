@@ -110,8 +110,8 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
     @Override
     @Transactional
-     public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription) {
-        return workflowDao.updateWorkflowDescriptionByWorkflow(workflowId, newDescription);
+     public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription, String descEmbedding) {
+        return workflowDao.updateWorkflowDescriptionByWorkflow(workflowId, newDescription, descEmbedding);
     }
 }
 

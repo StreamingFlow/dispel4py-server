@@ -5,7 +5,7 @@ import com.dispel4py.rest.error.EntityNotFoundException;
 import com.dispel4py.rest.model.PE;
 import com.dispel4py.rest.service.PEService;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Map;
 import java.util.List;
 
 @RestController
@@ -47,9 +47,17 @@ public class PEController {
     public int removePEbyName(@PathVariable(value = "name") String name, @PathVariable String user) {
         return peService.removePEByName(name, user);
     }
+
     @PutMapping("/update/{id}/description")
-    public PE updatePEDescriptionById(@PathVariable(value = "id") Long id, @RequestBody String description) {
-        return peService.updatePEDescriptionById(id, description);
+    public PE updatePEDescriptionById(
+       @PathVariable(value = "id") Long id,
+       @RequestBody Map<String, String> payload) {
+
+       String description = payload.get("description");
+       String descEmbedding = payload.get("descEmbedding");
+
+       return peService.updatePEDescriptionById(id, description, descEmbedding);
+ 
     }
 
 }

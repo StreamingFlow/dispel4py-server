@@ -71,13 +71,14 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
 
     @Override
-    public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription) {
+    public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription, String descEmbedding) {
     	Workflow workflow = entityManager.find(Workflow.class, workflowId.intValue());
     	if (workflow == null) {
         	throw new EntityNotFoundException(Workflow.class, "workflowId", workflowId.toString());
     	}
 
     	workflow.setDescription(newDescription);
+    	workflow.setDescEmbedding(descEmbedding);
     	entityManager.merge(workflow);
     	return workflow;
     }

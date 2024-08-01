@@ -88,6 +88,10 @@ public class PE extends Registry {
         this.description = description;
     }
 
+    public void setDescEmbedding(String descEmbedding) {
+        this.descEmbedding = descEmbedding;
+    }
+
     public List<Workflow> getWorkflows() {
         return workflows;
     }
@@ -124,9 +128,6 @@ public class PE extends Registry {
         return descEmbedding;
     }
 
-    public void setDescEmbedding(String descEmbeddings) {
-        this.descEmbedding = descEmbeddings;
-    }
 
     @Override
     public String toString() {
