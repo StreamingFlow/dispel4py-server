@@ -21,6 +21,6 @@ public interface PEService {
 
     int removePEByName(String peName, String user);
     
-    PE updatePEDescriptionById(Long id, String description);
+    PE updatePEDescriptionById(Long id, String description, String descEmbedding);
 
 }

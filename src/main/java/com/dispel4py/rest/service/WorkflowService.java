@@ -24,5 +24,5 @@ public interface WorkflowService {
 
     Collection getPEsByWorkflow(String name, String user);
 
-    Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription);
+    Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription, String descEmbedding);
 }
