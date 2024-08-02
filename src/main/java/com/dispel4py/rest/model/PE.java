@@ -29,6 +29,9 @@ public class PE extends Registry {
     @Lob
     @Column(length = 20000)
     String descEmbedding;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    String astEmbedding;
     @JsonIgnore
     @ManyToMany(mappedBy = "PEs")
     private List<Workflow> workflows;
@@ -39,7 +42,7 @@ public class PE extends Registry {
 
     public PE(Integer id, String PEName, String PECode,
               String description, String peImports,
-              String codeEmbeddings, String descEmbeddings,List<User> user) {
+              String codeEmbeddings, String descEmbeddings, String astEmbedding, List<User> user) {
 
         this.peId = id;
         this.peName = PEName;
@@ -49,6 +52,7 @@ public class PE extends Registry {
         this.user = user;
         this.codeEmbedding = codeEmbeddings;
         this.descEmbedding = descEmbeddings;
+        this.astEmbedding = astEmbedding;
 
     }
 
@@ -126,6 +130,14 @@ public class PE extends Registry {
 
     public String getDescEmbedding() {
         return descEmbedding;
+    }
+
+    public String getAstEmbedding() {
+        return astEmbedding;
+    }
+
+    public void setAstEmbedding(String astEmbedding) {
+        this.astEmbedding = astEmbedding;
     }
 
 
