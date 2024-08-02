@@ -14,13 +14,15 @@ public class Execution implements Serializable {
     List<String> resources;
     String imports;
     String user;
+    String moduleSourceCode;
 
-    public Execution(Long workflowId, Workflow graph, Integer process, List<String> resources, String imports) {
+    public Execution(Long workflowId, Workflow graph, Integer process, List<String> resources, String imports, String moduleSourceCode) {
         this.workflowId = workflowId;
         this.graph = graph;
         this.process = process;
         this.imports = imports;
         this.resources = resources;
+        this.moduleSourceCode = moduleSourceCode;
     }
 
     public Long getWorkflowId() {
@@ -94,6 +96,17 @@ public class Execution implements Serializable {
     public void setUser(String user) {
         this.user = user;
     }
+
+
+    // Getter and Setter for moduleSourceCode
+    public String getModuleSourceCode() {
+        return moduleSourceCode;
+    }
+
+    public void setModuleSourceCode(String moduleSourceCode) {
+        this.moduleSourceCode = moduleSourceCode;
+    }
+
 
 
     @Override
