@@ -9,6 +9,7 @@ import com.dispel4py.rest.model.PE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -267,5 +268,28 @@ public class WorkflowDaoImpl implements WorkflowDao {
         }
 
     }
+
+   @Override
+    public Collection getWorkflowsByPE(Long id, User user) {
+    try {
+        // Updated SQL query to correctly join tables and retrieve workflow details
+        Query query = entityManager.createNativeQuery(
+            "SELECT workflows.workflow_id, workflows.entry_point, workflows.description, workflows.workflow_code, workflows.module_source_code " +
+            "FROM workflows " +
+            "INNER JOIN workflows_user ON workflows.workflow_id = workflows_user.workflow_workflow_id " +
+            "INNER JOIN workflow_pe ON workflows.workflow_id = workflow_pe.workflow_id " +
+            "WHERE workflow_pe.pe_id = :peId " +
+            "AND workflows_user.user_user_id = :userId"
+        );
+
+        query.setParameter("peId", id).setParameter("userId", user.getUserId());
+
+        return query.getResultList();
+    } catch (NoResultException ex) {
+        throw new EntityNotFoundException(Workflow.class, "id", Integer.toString(id.intValue()));
+    }
+  }
+
+
 }
 
