@@ -100,6 +100,7 @@ public class ExecutionServiceImpl implements ExecutionService {
                 }
             }
             e.setModuleSourceCode(wf.getModuleSourceCode());
+            e.setModuleName(wf.getModuleName());
             e.setImports(imports);
 
         } else if (!(workflowName == null)) {
@@ -115,6 +116,7 @@ public class ExecutionServiceImpl implements ExecutionService {
             }
             e.setImports(imports);
             e.setModuleSourceCode(wf.getModuleSourceCode());
+            e.setModuleName(wf.getModuleName());
         }
 
         System.out.println(e);
