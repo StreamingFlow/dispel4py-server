@@ -19,6 +19,8 @@ public class PE extends Registry {
     String peName;
     @Column(length = 5000)
     String peCode;
+    @Column(length = 5000)
+    String sourceCode;
     @Column
     String description;
     @Column
@@ -40,13 +42,14 @@ public class PE extends Registry {
     @JoinColumn(name = "userId", nullable = false)
     List<User> user;
 
-    public PE(Integer id, String PEName, String PECode,
+    public PE(Integer id, String PEName, String PECode, String sourceCode, 
               String description, String peImports,
               String codeEmbeddings, String descEmbeddings, String astEmbedding, List<User> user) {
 
         this.peId = id;
         this.peName = PEName;
         this.peCode = PECode;
+        this.sourceCode = sourceCode;
         this.description = description;
         this.peImports = peImports;
         this.user = user;
@@ -84,6 +87,13 @@ public class PE extends Registry {
         this.peCode = PECode;
     }
 
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = sourceCode;
+    }
     public String getDescription() {
         return description;
     }
