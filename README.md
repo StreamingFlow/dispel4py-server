@@ -65,3 +65,8 @@ docker-compose up --build
 ```
 By following these steps, you can ensure that the server is properly configured and running efficiently.
 
+You can also prune the data from the docker, if you need to:
+```
+ docker system prune -a
+```
+We recommend to do this step after `docker-compose down` and before `docker-compose up --build`. But be carreful, this will delete the full registry database information.
