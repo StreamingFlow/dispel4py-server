@@ -130,5 +130,5 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 
 ### Visual Representation
 
-This schema can be visualized using an Entity-Relationship (ER) diagram, which illustrates the relationships between the different entities in the database. For more details, refer to the [Laminar2 Model](laminar2model.png).
+This schema can be visualized using an Entity-Relationship (ER) diagram, which illustrates the relationships between the different entities in the database. For more details, refer to the ![Laminar2 Model](laminar2model.png).
 
