@@ -1,7 +1,6 @@
 ![Laminar Logo](logo.webp)
 
 ## Introduction
-ntroduction
 
 The Laminar Server is a core component of the Laminar framework, acting as an intermediary between the [Laminar Client](https://github.com/StreamingFlow/dispel4py-client) and the [Execution Engine](https://github.com/StreamingFlow/dispel4py-execution). It handles all communication from the client, routing requests to either the registry or the execution engine as needed. When you interact with the Laminar system through the client, your requests are processed by the server, which manages and coordinates the necessary operations on your behalf.
 
