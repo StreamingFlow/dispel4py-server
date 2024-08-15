@@ -125,9 +125,11 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 - **User** `has` → **Workflow**: A user can have zero or multiple workflows. Each workflow belongs to one or multiple users.
 - **Workflow** `has` → **ProcessingElement**: A workflow can include multiple processing elements. 
 - **Execution** `executes` → **Workflow**: An execution is tied to a specific workflow. A workflow can be executed zero or multiple times.
-- **Execution** `executes` → **User**: An execution is tied to a specific user. A workflow can be executed zero or multiple times by the same user.
+- **Execution** `executes` → **User**: An execution is tied to a specific user. A user can execute a workflow zero or multiple times.
 - **Execution** `obtains` → **Response**: An execution results in a response, which holds the output of the execution.
 
-This can be seen in the ![laminar2](laminar2model.png) schema of the registry. 
+This can be seen bellow, in the schema of the registry.
+
+![laminar2](laminar2model.png) 
 
 
