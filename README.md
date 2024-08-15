@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Laminar Server is a core component of the Laminar framework, acting as an intermediary between the [Laminar Client](https://github.com/StreamingFlow/dispel4py-client) and the [Execution Engine](https://github.com/StreamingFlow/dispel4py-execution). It handles all communication from the client, routing requests to either the registry or the execution engine as needed. When you interact with the Laminar system through the client, your requests are processed by the server, which manages and coordinates the necessary operations on your behalf.
+The Laminar Server is a core component of the Laminar framework, acting as an intermediary between the [Laminar Client](https://github.com/StreamingFlow/dispel4py-client) and the [Execution Engine](https://github.com/StreamingFlow/dispel4py-execution). It handles all communication from the client, routing requests to either the registry (MySQL database) or the execution engine as needed. When you interact with the Laminar system through the client, your requests are processed by the server, which manages and coordinates the necessary operations on your behalf.
 
 ### Laminar Server Installation and Execution
 Open a new terminal with the new `Laminar` directory.
@@ -81,4 +81,53 @@ We recommend to do this step after `docker-compose down` and before `docker-comp
 The [laminar client](https://github.com/StreamingFlow/dispel4py-client) offers a user-friendly interface for registering and managing Processing Elements (PEs) as well as stream-based dispel4py workflows. For detailed guidance on how to interact with the system, please refer to the [user manual](https://github.com/StreamingFlow/dispel4py-client/wiki) available on the project's wiki.
 
 In addition, the [laminar execution-engine](https://github.com/StreamingFlow/dispel4py-execution) is a critical component that must be installed, either locally or remotely, to facilitate the serverless execution of workflows.
+
+## Registry Schema
+
+
+The registry  schema of Laminar is designed to efficiently manage users, workflows, processing elements (PEs), executions, and their corresponding responses. Below is a representation of the schema:
+
+### Tables
+
+#### User
+- **userId**: Unique identifier for the user.
+- **userName**: The name of the user.
+- **password**: The password for the user.
+
+#### Workflow
+- **workflowId**: Unique identifier for the workflow.
+- **workflowName**: The name of the workflow.
+- **workflowCode**: The code representing the workflow.
+- **entryPoint**: The entry point of the workflow.
+- **description**: A description of the workflow.
+- **descEmbedding**: Embedding of the workflow description for semantic search.
+
+#### ProcessingElement
+- **peId**: Unique identifier for the processing element.
+- **peName**: The name of the processing element.
+- **peCode**: The code representing the processing element.
+- **entryPoint**: The entry point of the processing element.
+- **description**: A description of the processing element.
+- **codeEmbedding**: Embedding of the processing element code for semantic search.
+- **sptEmbedding**: Abstract Syntax Tree (AST) embedding for enhanced search.
+- **peImport**: Dependencies or imports required by the processing element.
+
+#### Execution
+- **executionId**: Unique identifier for the execution.
+- **resource**: Resources associated with the execution (e.g., computing resources).
+
+#### Response
+- **responseId**: Unique identifier for the response.
+- **result**: The result of the workflow execution.
+
+### Relationships
+
+- **User** `has` → **Workflow**: A user can have zero or multiple workflows. Each workflow belongs to one or multiple users.
+- **Workflow** `has` → **ProcessingElement**: A workflow can include multiple processing elements. 
+- **Execution** `executes` → **Workflow**: An execution is tied to a specific workflow. A workflow can be executed zero or multiple times.
+- **Execution** `executes` → **User**: An execution is tied to a specific user. A workflow can be executed zero or multiple times by the same user.
+- **Execution** `obtains` → **Response**: An execution results in a response, which holds the output of the execution.
+
+
+
 
