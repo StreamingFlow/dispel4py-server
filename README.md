@@ -111,11 +111,11 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 - **descEmbedding**: Embedding of the description of the processing element for semantic search.
 - **codeEmbedding**: Embedding of the processing element code for code recommendation.
 - **sptEmbedding**: Abstract Syntax Tree (AST) embedding for enhanced code recommendation (structural).
-- **peImport**: Dependencies or imports required by the processing element.
+- **peImport**: Dependencies or imports required by the processing element. This is a multivalued attribute. 
 
 #### Execution
 - **executionId**: Unique identifier for the execution.
-- **resource**: Resources associated with the execution (e.g., computing resources).
+- **resource**: Resources associated with the execution (e.g., computing resources). This is a multivalued attribute.
 
 #### Response
 - **responseId**: Unique identifier for the response.
