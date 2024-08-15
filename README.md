@@ -87,7 +87,7 @@ In addition, the [laminar execution-engine](https://github.com/StreamingFlow/dis
 
 The registry  schema of Laminar is designed to efficiently manage users, workflows, processing elements (PEs), executions, and their corresponding responses. Below is a representation of the schema:
 
-### Tables
+### Entity-sets
 
 #### User
 - **userId**: Unique identifier for the user.
@@ -120,7 +120,7 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 - **responseId**: Unique identifier for the response.
 - **result**: The result of the workflow execution.
 
-### Relationships
+### Relationship-sets
 
 - **User** `has` → **Workflow**: A user can have zero or multiple workflows. Each workflow belongs to one or multiple users.
 - **Workflow** `has` → **ProcessingElement**: A workflow can include multiple processing elements. 
@@ -128,8 +128,7 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 - **Execution** `executes` → **User**: An execution is tied to a specific user. A user can execute a workflow zero or multiple times.
 - **Execution** `obtains` → **Response**: An execution results in a response, which holds the output of the execution.
 
-This can be seen bellow, in the schema of the registry.
+### Visual Representation
 
-![laminar2](laminar2model.png) 
-
+This schema can be visualized using an Entity-Relationship (ER) diagram, which illustrates the relationships between the different entities in the database. For more details, refer to the [Laminar2 Model](laminar2model.png).
 
