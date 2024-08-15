@@ -108,8 +108,9 @@ The registry  schema of Laminar is designed to efficiently manage users, workflo
 - **peCode**: The code representing the processing element.
 - **entryPoint**: The entry point of the processing element.
 - **description**: A description of the processing element.
-- **codeEmbedding**: Embedding of the processing element code for semantic search.
-- **sptEmbedding**: Abstract Syntax Tree (AST) embedding for enhanced search.
+- **descEmbedding**: Embedding of the description of the processing element for semantic search.
+- **codeEmbedding**: Embedding of the processing element code for code recommendation.
+- **sptEmbedding**: Abstract Syntax Tree (AST) embedding for enhanced code recommendation (structural).
 - **peImport**: Dependencies or imports required by the processing element.
 
 #### Execution
