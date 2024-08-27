@@ -17,13 +17,43 @@ Enter the server directory.
 ```
 /data/Laminar> cd dispel4py-server
 ```
-To manage permission issues, run:
+
+### Requirements (Non-Docker Installation)
+
+If you plan to install the Laminar Server without using Docker, you need to meet the following prerequisites:
+
+* Java 17 (JDK 17)
+* MySQL Server (must be installed and running)
+
+Additionally, you'll need to create the following MySQL database and user:
+
+```
+CREATE DATABASE laminar;
+CREATE USER 'laminar'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON laminar.* TO 'laminar'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+Update the `/src/main/resources/application.properties` file with the following configuration:
+```
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://localhost:3306/laminar?useSSL=false&allowPublicKeyRetrieval=true
+spring.datasource.username=laminar
+spring.datasource.password=password
+server.error.include-message=always
+laminar.execution.url=http://localhost:5000
+server.address=0.0.0.0
+spring.servlet.multipart.max-file-size=1000MB
+spring.servlet.multipart.max-request-size=1000MB
+```
+
+Ensure proper permissions by running:
 ```
 /data/Laminar/dispel4py-server> chmod +x gradlew
 ```
-To configure the required fields, navigate to `/src/main/resources/application.properties` and fill in the required variables
 
-To run the server
+To start the server
 ```
 /data/Laminar/dispel4py-server> ./gradlew bootRun
 ```
@@ -38,6 +68,7 @@ com.dispel4py.rest.RestApplication: Started RestApplication in 66.905 seconds (J
 ### Docker Execution 
 
 To run the application in a docker container follow these intstructions 
+
 
 Clone the server application repository.
 
@@ -74,7 +105,9 @@ You can also prune the data from the docker, if you need to:
 ```
  docker system prune -a
 ```
-We recommend to do this step after `docker-compose down` and before `docker-compose up --build`. But be carreful, this will delete the full registry database information.
+**Note**: We recommend to do this step after `docker-compose down` and before `docker-compose up --build`. But be carreful, this will delete the full registry database information.
+
+**Important**: When using Docker, you do not need to install MySQL locally or manually create the database.
 
 ## Other Laminar components
 
