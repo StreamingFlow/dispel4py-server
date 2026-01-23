@@ -9,7 +9,10 @@ RUN ./gradlew build
 FROM ubuntu:20.04 as vim-installer
 RUN apt-get update && apt-get install -y vim
 
-FROM openjdk:17
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y openjdk-17-jdk
 
 COPY --from=BUILD /gradle/build/libs/rest-0.0.1-SNAPSHOT.jar app.jar
 

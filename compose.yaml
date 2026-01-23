@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   server:
     build:
@@ -21,6 +19,8 @@ services:
         condition: service_healthy
     networks:
       - laminar-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mysql:
     image: mysql:latest
