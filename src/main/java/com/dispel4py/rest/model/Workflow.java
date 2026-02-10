@@ -24,7 +24,7 @@ public class Workflow extends Registry {
     @Column(unique = true)
     String entryPoint;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     String description;
     
     @Lob

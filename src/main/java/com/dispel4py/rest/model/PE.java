@@ -21,7 +21,7 @@ public class PE extends Registry {
     String peCode;
     @Column(length = 5000)
     String sourceCode;
-    @Column
+    @Column(columnDefinition = "TEXT")
     String description;
     @Column
     String peImports;
