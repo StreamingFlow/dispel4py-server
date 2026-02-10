@@ -7,7 +7,7 @@ services:
         MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
         MYSQL_URL: jdbc:mysql://mysql:3306/laminar?useSSL=false&allowPublicKeyRetrieval=true
         EXECUTION_URL: ${LAMINAR_EXECUTION_URL:-host.docker.internal}
-        EXECUTION_PORT: ${LAMINAR_EXECUTION_PORT:-5432}
+        EXECUTION_PORT: ${LAMINAR_EXECUTION_PORT:-5000}
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/laminar?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: laminar
