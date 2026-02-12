@@ -26,7 +26,7 @@ public class Workflow extends Registry {
 
     @Column(columnDefinition = "TEXT")
     String description;
-    
+
     @Lob
     @Column(length = 20000)
     String descEmbedding;
@@ -34,9 +34,25 @@ public class Workflow extends Registry {
     @Lob
     @Column(length = 50000)
     String moduleSourceCode;
-    
+
     @Column
     String moduleName;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String lldDescriptionProvider;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String lldDescriptionModel;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String inputsDescription;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String outputsDescription;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -50,7 +66,10 @@ public class Workflow extends Registry {
     List<User> user;
 
 
-    public Workflow(Integer id, String workflowName, String workflowCode, String entryPoint, String description,  String descEmbedding, String moduleSourceCode, String moduleName, List<PE> PEs, List<User> user) {
+    public Workflow(Integer id, String workflowName, String workflowCode, String entryPoint, String description,
+                    String lldDescriptionProvider, String lldDescriptionModel, String inputsDescription,
+                    String outputsDescription, String descEmbedding, String moduleSourceCode, String moduleName,
+                    List<PE> PEs, List<User> user) {
         this.workflowId = id;
         this.workflowName = workflowName;
         this.workflowCode = workflowCode;
@@ -61,6 +80,10 @@ public class Workflow extends Registry {
         this.descEmbedding = descEmbedding;
         this.moduleSourceCode = moduleSourceCode;
         this.moduleName = moduleName;
+        this.lldDescriptionProvider = lldDescriptionProvider;
+        this.lldDescriptionModel = lldDescriptionModel;
+        this.inputsDescription = inputsDescription;
+        this.outputsDescription = outputsDescription;
     }
 
 
@@ -107,7 +130,7 @@ public class Workflow extends Registry {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public void setDescEmbedding(String descEmbedding) {
         this.descEmbedding = descEmbedding;
     }
@@ -148,7 +171,22 @@ public class Workflow extends Registry {
         this.moduleName = moduleName;
     }
 
+    public String getLldDescriptionProvider() {
+        return lldDescriptionProvider;
+    }
 
+    public String getLldDescriptionModel() {
+        return lldDescriptionModel;
+    }
+
+
+    public String getInputsDescription() {
+        return inputsDescription;
+    }
+
+    public String getOutputsDescription() {
+        return outputsDescription;
+    }
 
     @Override
     public String toString() {
