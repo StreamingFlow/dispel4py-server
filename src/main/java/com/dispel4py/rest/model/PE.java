@@ -17,12 +17,35 @@ public class PE extends Registry {
     Integer peId;
     @Column(unique = true)
     String peName;
-    @Column(length = 5000)
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String peCode;
-    @Column(length = 5000)
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String sourceCode;
-    @Column
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String description;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String lldDescriptionProvider;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String lldDescriptionModel;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String inputsDescription;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String outputsDescription;
+
     @Column
     String peImports;
     @Lob
@@ -42,9 +65,10 @@ public class PE extends Registry {
     @JoinColumn(name = "userId", nullable = false)
     List<User> user;
 
-    public PE(Integer id, String PEName, String PECode, String sourceCode, 
-              String description, String peImports,
-              String codeEmbeddings, String descEmbeddings, String astEmbedding, List<User> user) {
+    public PE(Integer id, String PEName, String PECode, String sourceCode,
+              String description, String peImports, String lldDescriptionProvider, String lldDescriptionModel,
+              String inputsDescription, String outputsDescription, String codeEmbeddings, String descEmbeddings,
+              String astEmbedding, List<User> user) {
 
         this.peId = id;
         this.peName = PEName;
@@ -56,6 +80,10 @@ public class PE extends Registry {
         this.codeEmbedding = codeEmbeddings;
         this.descEmbedding = descEmbeddings;
         this.astEmbedding = astEmbedding;
+        this.lldDescriptionProvider = lldDescriptionProvider;
+        this.lldDescriptionModel = lldDescriptionModel;
+        this.inputsDescription = inputsDescription;
+        this.outputsDescription = outputsDescription;
 
     }
 
@@ -94,6 +122,7 @@ public class PE extends Registry {
     public void setSourceCode(String sourceCode) {
         this.sourceCode = sourceCode;
     }
+
     public String getDescription() {
         return description;
     }
@@ -148,6 +177,23 @@ public class PE extends Registry {
 
     public void setAstEmbedding(String astEmbedding) {
         this.astEmbedding = astEmbedding;
+    }
+
+    public String getLldDescriptionProvider() {
+        return lldDescriptionProvider;
+    }
+
+    public String getLldDescriptionModel() {
+        return lldDescriptionModel;
+    }
+
+
+    public String getInputsDescription() {
+        return inputsDescription;
+    }
+
+    public String getOutputsDescription() {
+        return outputsDescription;
     }
 
 
