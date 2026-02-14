@@ -54,6 +54,10 @@ public class Workflow extends Registry {
     @Column(columnDefinition = "TEXT")
     String outputsDescription;
 
+    @Lob
+    @ElementCollection
+    List<String> tags;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "workflow_pe",
@@ -69,7 +73,7 @@ public class Workflow extends Registry {
     public Workflow(Integer id, String workflowName, String workflowCode, String entryPoint, String description,
                     String lldDescriptionProvider, String lldDescriptionModel, String inputsDescription,
                     String outputsDescription, String descEmbedding, String moduleSourceCode, String moduleName,
-                    List<PE> PEs, List<User> user) {
+                    List<PE> PEs, List<User> user, List<String> tags) {
         this.workflowId = id;
         this.workflowName = workflowName;
         this.workflowCode = workflowCode;
@@ -84,6 +88,7 @@ public class Workflow extends Registry {
         this.lldDescriptionModel = lldDescriptionModel;
         this.inputsDescription = inputsDescription;
         this.outputsDescription = outputsDescription;
+        this.tags = tags;
     }
 
 
@@ -188,6 +193,10 @@ public class Workflow extends Registry {
         return outputsDescription;
     }
 
+    public List<String> getTags(){
+        return tags;
+    }
+    
     @Override
     public String toString() {
         return "Workflow(" + this.getWorkflowId() + "\n" + this.getWorkflowName()
