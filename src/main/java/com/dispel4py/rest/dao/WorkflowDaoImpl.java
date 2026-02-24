@@ -23,11 +23,13 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
     private final EntityManager entityManager;
     private final PEDao peDao;
+    private final PEFtsDao peFtsDao;
 
     @Autowired
-    public WorkflowDaoImpl(EntityManager entityManager, PEDao peDao) {
+    public WorkflowDaoImpl(EntityManager entityManager, PEDao peDao, PEFtsDao peFtsDao) {
         this.entityManager = entityManager;
         this.peDao = peDao;
+        this.peFtsDao = peFtsDao;
     }
 
     @Override
@@ -73,15 +75,15 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
     @Override
     public Workflow updateWorkflowDescriptionByWorkflow(Long workflowId, String newDescription, String descEmbedding) {
-    	Workflow workflow = entityManager.find(Workflow.class, workflowId.intValue());
-    	if (workflow == null) {
-        	throw new EntityNotFoundException(Workflow.class, "workflowId", workflowId.toString());
-    	}
+        Workflow workflow = entityManager.find(Workflow.class, workflowId.intValue());
+        if (workflow == null) {
+            throw new EntityNotFoundException(Workflow.class, "workflowId", workflowId.toString());
+        }
 
-    	workflow.setDescription(newDescription);
-    	workflow.setDescEmbedding(descEmbedding);
-    	entityManager.merge(workflow);
-    	return workflow;
+        workflow.setDescription(newDescription);
+        workflow.setDescEmbedding(descEmbedding);
+        entityManager.merge(workflow);
+        return workflow;
     }
 
     @Override
@@ -166,7 +168,7 @@ public class WorkflowDaoImpl implements WorkflowDao {
             for (PE pe : workflowToRemove.getPEs()) {
                 // Check if the PE is associated with any other workflows
                 boolean isUsedInOtherWorkflows = !entityManager.createQuery(
-                        "SELECT w FROM Workflow w JOIN w.PEs p WHERE p = :pe AND w != :workflowToRemove", Workflow.class)
+                                "SELECT w FROM Workflow w JOIN w.PEs p WHERE p = :pe AND w != :workflowToRemove", Workflow.class)
                         .setParameter("pe", pe)
                         .setParameter("workflowToRemove", workflowToRemove)
                         .getResultList()
@@ -188,6 +190,8 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
             // Remove PEs that are not used in any other workflow
             for (PE pe : pesToRemove) {
+                long pe_id = pe.getPeId();
+                peFtsDao.delete(pe_id);
                 entityManager.remove(pe);
             }
         }
@@ -208,7 +212,7 @@ public class WorkflowDaoImpl implements WorkflowDao {
             for (PE pe : workflowToRemove.getPEs()) {
                 // Check if the PE is associated with any other workflows
                 boolean isUsedInOtherWorkflows = !entityManager.createQuery(
-                        "SELECT w FROM Workflow w JOIN w.PEs p WHERE p = :pe AND w != :workflowToRemove", Workflow.class)
+                                "SELECT w FROM Workflow w JOIN w.PEs p WHERE p = :pe AND w != :workflowToRemove", Workflow.class)
                         .setParameter("pe", pe)
                         .setParameter("workflowToRemove", workflowToRemove)
                         .getResultList()
@@ -230,6 +234,8 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
             // Remove PEs that are not used in any other workflow
             for (PE pe : pesToRemove) {
+                long pe_id = pe.getPeId();
+                peFtsDao.delete(pe_id);
                 entityManager.remove(pe);
             }
         }
@@ -269,26 +275,26 @@ public class WorkflowDaoImpl implements WorkflowDao {
 
     }
 
-   @Override
+    @Override
     public Collection getWorkflowsByPE(Long id, User user) {
-    try {
-        // Updated SQL query to correctly join tables and retrieve workflow details
-        Query query = entityManager.createNativeQuery(
-            "SELECT workflows.workflow_id, workflows.entry_point, workflows.description, workflows.workflow_code, workflows.module_source_code " +
-            "FROM workflows " +
-            "INNER JOIN workflows_user ON workflows.workflow_id = workflows_user.workflow_workflow_id " +
-            "INNER JOIN workflow_pe ON workflows.workflow_id = workflow_pe.workflow_id " +
-            "WHERE workflow_pe.pe_id = :peId " +
-            "AND workflows_user.user_user_id = :userId"
-        );
+        try {
+            // Updated SQL query to correctly join tables and retrieve workflow details
+            Query query = entityManager.createNativeQuery(
+                    "SELECT workflows.workflow_id, workflows.entry_point, workflows.description, workflows.workflow_code, workflows.module_source_code " +
+                            "FROM workflows " +
+                            "INNER JOIN workflows_user ON workflows.workflow_id = workflows_user.workflow_workflow_id " +
+                            "INNER JOIN workflow_pe ON workflows.workflow_id = workflow_pe.workflow_id " +
+                            "WHERE workflow_pe.pe_id = :peId " +
+                            "AND workflows_user.user_user_id = :userId"
+            );
 
-        query.setParameter("peId", id).setParameter("userId", user.getUserId());
+            query.setParameter("peId", id).setParameter("userId", user.getUserId());
 
-        return query.getResultList();
-    } catch (NoResultException ex) {
-        throw new EntityNotFoundException(Workflow.class, "id", Integer.toString(id.intValue()));
+            return query.getResultList();
+        } catch (NoResultException ex) {
+            throw new EntityNotFoundException(Workflow.class, "id", Integer.toString(id.intValue()));
+        }
     }
-  }
 
 
 }
