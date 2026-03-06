@@ -46,6 +46,10 @@ public class PE extends Registry {
     @Column(columnDefinition = "TEXT")
     String outputsDescription;
 
+    @Lob
+    @ElementCollection
+    List<String> tags;
+
     @Column
     String peImports;
     @Lob
@@ -68,7 +72,7 @@ public class PE extends Registry {
     public PE(Integer id, String PEName, String PECode, String sourceCode,
               String description, String peImports, String lldDescriptionProvider, String lldDescriptionModel,
               String inputsDescription, String outputsDescription, String codeEmbeddings, String descEmbeddings,
-              String astEmbedding, List<User> user) {
+              String astEmbedding, List<User> user, List<String> tags) {
 
         this.peId = id;
         this.peName = PEName;
@@ -84,6 +88,7 @@ public class PE extends Registry {
         this.lldDescriptionModel = lldDescriptionModel;
         this.inputsDescription = inputsDescription;
         this.outputsDescription = outputsDescription;
+        this.tags = tags;
 
     }
 
@@ -194,6 +199,10 @@ public class PE extends Registry {
 
     public String getOutputsDescription() {
         return outputsDescription;
+    }
+
+    public List<String> getTags(){
+        return tags;
     }
 
 
