@@ -18,13 +18,13 @@ public class Workflow extends Registry {
     @Column
     String workflowName;
 
-    @Column(columnDefinition = "varchar(10000)")
+    @Column(columnDefinition = "LONGTEXT")
     String workflowCode;
 
     @Column(unique = true)
     String entryPoint;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     String description;
 
     @Lob

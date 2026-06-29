@@ -19,7 +19,7 @@ public class PE extends Registry {
     String peName;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     String peCode;
 
     @Lob
