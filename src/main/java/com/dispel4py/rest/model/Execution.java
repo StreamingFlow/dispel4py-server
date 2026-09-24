@@ -10,12 +10,18 @@ public class Execution implements Serializable {
     Workflow graph;
     String inputCode;
     Integer process;
+    Integer numProcesses;
+
+    public Integer getNumProcesses() { return numProcesses; }
+    public void setNumProcesses(Integer numProcesses) { this.numProcesses = numProcesses; }
     String workflowCode;
     List<String> resources;
     String imports;
     String user;
     String moduleSourceCode;
     String moduleName;
+
+    public Execution() {}
 
     public Execution(Long workflowId, Workflow graph, Integer process, List<String> resources, String imports, String moduleSourceCode, String moduleName) {
         this.workflowId = workflowId;

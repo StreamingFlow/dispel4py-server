@@ -34,11 +34,16 @@ public class ExecutionServiceImpl implements ExecutionService {
         this.workflowService = workflowService;
     }
 
+    protected WebClient executionClient(String url) {
+        return WebClient.builder().baseUrl(url)
+                .codecs(c -> c.defaultCodecs().maxInMemorySize(64 * 1024 * 1024)).build();
+    }
+
     @Override
     public void sendResources(MultipartFile[] files, String user) {
         Logger logger = Logger.getLogger(getClass().getName());
         String url = env.getProperty("laminar.execution.url");
-        WebClient webClient = WebClient.create(url);
+        WebClient webClient = executionClient(url);
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("user", user);
@@ -123,7 +128,7 @@ public class ExecutionServiceImpl implements ExecutionService {
 
         //WebClient webClient = WebClient.create("https://executionengined4py.azurewebsites.net");
         String url = env.getProperty("laminar.execution.url");
-        WebClient webClient = WebClient.create(url);
+        WebClient webClient = executionClient(url);
 
         Flux<String> result = webClient.post()
                 .uri("/run")
@@ -135,7 +140,7 @@ public class ExecutionServiceImpl implements ExecutionService {
                 //.bodyToMono(String.class).block();
 
         System.out.println(result);
-        result.subscribe(System.out::println);
+        // The controller is the sole subscriber; an extra subscription executes twice.
 
         return result;
 
